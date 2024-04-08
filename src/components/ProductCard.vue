@@ -1,16 +1,25 @@
 <template>
-  <tr class="text-sm">
-		<td class="max-w-64 pr-4">{{ name }}</td>
-		<td class="max-w-96 pr-4">{{ description }}</td>
-		<td class="max-w-64 pr-4">{{ productId }}</td>
-		<td class="w-32 text-center pr-4">{{ quantity }}</td>
-		<td class="w-32 text-center pr-4">{{ price }}</td>
-		<td class="max-w-64 text-center pr-4">{{ category }}</td>
-  </tr>
+  <TableRow>
+		<TableItem>{{ name }}</TableItem>
+		<TableItem>{{ description }}</TableItem>
+		<TableItem>{{ productId }}</TableItem>
+		<TableItem>{{ quantity }}</TableItem>
+		<TableItem>{{ price }}</TableItem>
+		<TableItem>{{ category ? category : 'Sem categoria' }}</TableItem>
+		<TableItem>
+			<a class="cursor-pointer">
+				<span class="material-symbols-outlined">
+					more_horiz
+				</span>
+			</a>
+		</TableItem>
+  </TableRow>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import TableItem from "./table/TableItem.vue";
+import TableRow from "./table/TableRow.vue"
 
 export default defineComponent({
   name: "ProductCard",
@@ -38,5 +47,4 @@ export default defineComponent({
   height: 100%;
   overflow-y: hidden;
 }
-
 </style>

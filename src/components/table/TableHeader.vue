@@ -1,5 +1,5 @@
 <template>
-	<th class="pr-4">
+	<th class="py-3 px-8 text-sm font-semibold text-left">
 		{{ columnName }}
 	</th>
 	</template>
