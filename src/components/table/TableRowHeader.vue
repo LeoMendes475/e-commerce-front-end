@@ -1,5 +1,5 @@
 <template>
-<tr class="bg-[#f9f9f9] rounded-t-lg h-10">
+<tr class="bg-[#f9f9f9] border-b rounded-t-lg h-10">
 	<slot/>
 </tr>
 </template>

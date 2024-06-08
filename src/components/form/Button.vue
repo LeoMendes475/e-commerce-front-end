@@ -1,5 +1,5 @@
 <template>
-	<button class="border pl-5 bg-[#4b68ff] text-white h-10 w-40 flex items-center rounded-[12px]">
+	<button class="border pl-5 bg-[#4b68ff] text-white hover:bg-white hover:text-[#4b68ff] hover:border-[#4b68ff] h-10 w-40 flex items-center rounded-[12px]">
 		<span class="material-symbols-outlined" v-if="icon">
 			{{ icon }}
 		</span>

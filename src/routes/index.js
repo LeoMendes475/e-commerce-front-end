@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
 import Home from "../pages/Home.vue"
-import Productlist from "../pages/ProductList.vue"
+import Productlist from "../pages/product/index.vue"
 import CreateProduct from "../pages/product/create.vue"
 
 const rotas = [
