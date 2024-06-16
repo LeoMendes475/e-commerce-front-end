@@ -3,41 +3,44 @@
 		<div class="px-12">
 			<div class="flex justify-between items-center my-8">
 				<Searchbar :title="'Search in product'" />
-
 			</div>
 
 			<div>
 				<div class="card">
 					<PrimeToolbar class="mb-4">
 						<template #start>
-							<router-link to="/product-create" tag="button">
-								<PrimeButton label="Add" icon="pi pi-plus" class=" flex text-center justify-center items-center w-[120px] h-[34px] rounded-[12px] border border-[#4b68ff] pl-5 pr-5 hover:text-[#4b68ff] bg-[#4b68ff] text-white hover:bg-white mr-4" />
+							<router-link to="/order-create" tag="button">
+								<PrimeButton label="Add" icon="pi pi-plus"
+									class=" flex text-center justify-center items-center w-[120px] h-[34px] rounded-[12px] border border-[#4b68ff] pl-5 pr-5 hover:text-[#4b68ff] bg-[#4b68ff] text-white hover:bg-white mr-4" />
 							</router-link>
-							<PrimeButton label="Export" icon="pi pi-upload" severity="help" @click="exportCSV($event)" class=" flex text-center justify-center items-center w-[120px] h-[34px] rounded-[12px] border border-[#4b68ff] pl-5 pr-5 text-[#4b68ff] hover:bg-[#4b68ff] hover:text-white" />
+							<PrimeButton label="Export" icon="pi pi-upload" severity="help" @click="exportCSV($event)"
+								class=" flex text-center justify-center items-center w-[120px] h-[34px] rounded-[12px] border border-[#4b68ff] pl-5 pr-5 text-[#4b68ff] hover:bg-[#4b68ff] hover:text-white" />
 						</template>
 					</PrimeToolbar>
 
-					<PrimeDataTable class="border rounded-[12px] p-4" ref="dt" :value="products" v-model:selection="selectedProducts" dataKey="id" :paginator="true"
-						:rows="10" :filters="filters"
+					<PrimeDataTable class="border rounded-[12px] p-4" ref="dt" :value="orders"
+						v-model:selection="selectedProducts" dataKey="id" :paginator="true" :rows="10" :filters="filters"
 						paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
 						currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products">
 						<template #header>
 							<div class="flex flex-wrap gap-2 align-items-center justify-content-between">
-								<h4 class="m-0 pb-6 text-xl font-semibold">Manage Products</h4>
+								<h4 class="m-0 pb-6 text-xl font-semibold">Manage orders</h4>
 								<InputText v-model="filters['global'].value" placeholder="Search..." />
 							</div>
 						</template>
 
 						<PrimeColumn selectionMode="multiple" style="width: 3rem" :exportable="false"></PrimeColumn>
-						<PrimeColumn field="id" header="Code" style="min-width:12rem"></PrimeColumn>
-						<PrimeColumn field="name" header="Name" style="min-width:16rem"></PrimeColumn>
-						<PrimeColumn field="value" header="Price" style="min-width:8rem">
+						<PrimeColumn field="user.name" header="SellerName" style="min-width:12rem"></PrimeColumn>
+						<PrimeColumn field="buyerName" header="Buyer Name" style="min-width:12rem"></PrimeColumn>
+						<PrimeColumn field="buyerPassport" header="Passport" style="min-width:6rem"></PrimeColumn>
+						<PrimeColumn field="buyerOrganization" header="Organization" style="min-width:8rem"></PrimeColumn>
+						<PrimeColumn field="orderQuantity" header="Quantity" style="min-width:6rem"></PrimeColumn>
+						<PrimeColumn field="product.name" header="Product" style="min-width:12rem"></PrimeColumn>
+						<PrimeColumn field="sellDate" header="Sell Date" style="min-width:6rem">
 							<template #body="slotProps">
-								{{ formatCurrency(slotProps.data.value) }}
+								{{ moment(slotProps.data.value).format('L') }}
 							</template>
 						</PrimeColumn>
-						<PrimeColumn field="categoryId" header="Category" style="min-width:16rem"></PrimeColumn>
-						<PrimeColumn field="quantity_available" header="Quantity" style="min-width:6rem"></PrimeColumn>
 						<PrimeColumn :exportable="false" style="min-width:8rem">
 							<template #body="slotProps">
 								<PrimeButton icon="pi pi-pencil" outlined rounded class="mr-2" @click="editProduct(slotProps.data)" />
@@ -50,23 +53,21 @@
 
 				<PrimeDialog v-model:visible="productDialog" :style="{ width: '450px' }" header="Product Details" :modal="true"
 					class="p-fluid">
-					<img v-if="product.image" :src="`https://primefaces.org/cdn/primevue/images/product/${product.image}`"
-						:alt="product.image" class="block m-auto pb-3" />
 					<div class="field">
 						<label for="name">Name</label>
-						<PrimeInputText id="name" v-model.trim="product.name" required="true" autofocus
-							:invalid="submitted && !product.name" />
-						<small class="p-error" v-if="submitted && !product.name">Name is required.</small>
+						<PrimeInputText id="name" v-model.trim="order.name" required="true" autofocus
+							:invalid="submitted && !order.name" />
+						<small class="p-error" v-if="submitted && !order.name">Name is required.</small>
 					</div>
 					<div class="field">
 						<label for="description">Description</label>
-						<PrimeTextarea id="description" v-model="product.description" required="true" rows="3" cols="20" />
+						<PrimeTextarea id="description" v-model="order.description" required="true" rows="3" cols="20" />
 					</div>
 
 					<div class="field">
 						<label for="inventoryStatus" class="mb-3">Inventory Status</label>
-						<PrimeDropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses"
-							optionLabel="label" placeholder="Select a Status">
+						<PrimeDropdown id="inventoryStatus" v-model="order.inventoryStatus" :options="statuses" optionLabel="label"
+							placeholder="Select a Status">
 							<template #value="slotProps">
 								<div v-if="slotProps.value && slotProps.value.value">
 									<Tag :value="slotProps.value.value" :severity="getStatusLabel(slotProps.value.label)" />
@@ -146,17 +147,18 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue';
+import moment from 'moment';
 import api from "../../services/index.ts";
 import { Product } from '../../types/product/product.type.ts'
 
 import Wrapper from '../../components/layout/Wrapper.vue';
-import Button from '../../components/form/Button.vue';
 import Searchbar from '../../components/Searchbar.vue';
 import { FilterMatchMode } from 'primevue/api';
-// import { useToast } from 'primevue/usetoast';
 
-const products = ref<Product[]>([]);
+const orders = ref<Product[]>([]);
+
+moment.locale('pt-br');
 
 onMounted(() => {
 	getData();
@@ -164,15 +166,15 @@ onMounted(() => {
 
 async function getData() {
 	try {
-		const { data } = await api.get("/product");
-		products.value = data.productList;
+		const { data } = await api.get("/order");
+		console.log("data: ", data)
+		orders.value = data.orders;
 	} catch (error) {
 		console.log("Error: ", error);
 	}
 }
 
 
-// const toast = useToast();
 const dt = ref();
 const productDialog = ref(false);
 const deleteProductDialog = ref(false);

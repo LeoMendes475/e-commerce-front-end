@@ -38,7 +38,7 @@ export default defineComponent({
         { icon: "inventory_2", name: "Product", route: "/product-list"},
         { icon: "person", name: "Customer", route: "/customer"},
         { icon: "label", name: "Category", route: "/category"},
-        { icon: "shopping_bag", name: "Orders", route: "/order"},
+        { icon: "shopping_bag", name: "Orders", route: "/order-list"},
         { icon: "local_activity", name: "Coupon", route: "/coupon"},
       ],
 			otherRoutes: [
